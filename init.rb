@@ -30,18 +30,17 @@ class DownloadCounterHook  < Redmine::Hook::ViewListener
     else
       # All projects
       Project.visible.each do |project|
-
         downloads += project.attachments.collect(&:downloads).sum
         downloads += project.versions.collect(&:attachments).flatten.collect(&:downloads).sum
-        
       end
+
       text = content_tag(:p, "#{downloads.to_s} #{l(:download_counter_text_downloads)}", :class => 'icon icon-package')
     end      
 
     response = content_tag(:div,
-                             content_tag(:h3, l(:download_counter_text_download_counter)) + text,
-                             :id => "download-counter"
-                             )
+                           content_tag(:h3, l(:download_counter_text_download_counter)) + text,
+                           :id => "download-counter"
+                           )
     return response
   end
   
