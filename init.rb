@@ -12,27 +12,36 @@ end
 class DownloadCounterHook  < Redmine::Hook::ViewListener
   def view_layouts_base_sidebar(context={ })
     response = ''
+    downloads = 0
     if context[:project]
-      downloads = 0
       downloads += context[:project].attachments.collect(&:downloads).sum
       downloads += context[:project].versions.collect(&:attachments).flatten.collect(&:downloads).sum
-      
-      response = content_tag(:div,
-                             content_tag(:h3, l(:download_counter_text_download_counter)) + 
-                             link_to("#{downloads.to_s} #{l(:download_counter_text_downloads)}", {
-                                       :controller => 'projects',
-                                       :action => 'list_files',
-                                       :id => context[:project],
-                                       :protocol => Setting.protocol,
-                                       :host => Setting.host_name
-                                     },
-                                     :class => 'icon icon-package'
-                                     
-                                     ),
+
+      text = link_to("#{downloads.to_s} #{l(:download_counter_text_downloads)}", {
+                       :controller => 'projects',
+                       :action => 'list_files',
+                       :id => context[:project],
+                       :protocol => Setting.protocol,
+                       :host => Setting.host_name
+                     },
+                     :class => 'icon icon-package'
+                     )
+
+    else
+      # All projects
+      Project.visible.each do |project|
+
+        downloads += project.attachments.collect(&:downloads).sum
+        downloads += project.versions.collect(&:attachments).flatten.collect(&:downloads).sum
+        
+      end
+      text = content_tag(:p, "#{downloads.to_s} #{l(:download_counter_text_downloads)}", :class => 'icon icon-package')
+    end      
+
+    response = content_tag(:div,
+                             content_tag(:h3, l(:download_counter_text_download_counter)) + text,
                              :id => "download-counter"
-                             
                              )
-    end
     return response
   end
   
