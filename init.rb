@@ -21,8 +21,7 @@ class DownloadCounterHook  < Redmine::Hook::ViewListener
                        :controller => 'projects',
                        :action => 'list_files',
                        :id => context[:project],
-                       :protocol => Setting.protocol,
-                       :host => Setting.host_name
+                       :only_path => true
                      },
                      :class => 'icon icon-package'
                      )
