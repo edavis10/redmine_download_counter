@@ -1,0 +1,19 @@
+<h2><%= l(:download_counter_panel) %></h2>
+
+<% if @download_counters.any? %>
+<table class="list">
+  <% @download_counters.each do |project,count| %>
+  <% next if count == 0 %>
+  <tr class="<%= cycle('odd', 'even') %>">
+    <td>
+      <span class="name">
+        <%= link_to(h(project.name), {:controller => 'projects', :action => 'show', :id => project}) %>
+      </span>
+    </td>
+    <td><%= h count %></td>
+</tr>
+<% end %>
+</table>
+<% else %>
+<p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>

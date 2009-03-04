@@ -1,4 +1,14 @@
 class DownloadCounter
+
+  def self.all
+    counters = { }
+    Project.find(:all).each do |project|
+      counters[project] = DownloadCounter.downloads_for(project)
+    end
+    # Sorted by number of downloads DESC
+    return counters.sort {|a,b| b[1] <=> a[1]}
+  end
+  
   def self.downloads_for(project=nil)
     downloads = 0
     if project
