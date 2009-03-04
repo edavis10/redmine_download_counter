@@ -11,4 +11,7 @@ Redmine::Plugin.register :redmine_download_counter do
   version '0.1.0'
 
   # TODO: Requires Redmine 0.8.2 or higher
+
+  menu :admin_menu, :download_counter, { :controller => 'download_counters', :action => 'index'}, :caption => :download_counter_panel
+
 end
