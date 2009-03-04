@@ -1,13 +1,10 @@
-module DownloadCounter
+module DownloadCounterPlugin
   module Hooks
     class LayoutHook  < Redmine::Hook::ViewListener
       def view_layouts_base_sidebar(context={ })
         response = ''
-        downloads = 0
+        downloads = DownloadCounter.downloads_for(context[:project])
         if context[:project]
-          downloads += context[:project].attachments.collect(&:downloads).sum
-          downloads += context[:project].versions.collect(&:attachments).flatten.collect(&:downloads).sum
-
           text = link_to("#{downloads.to_s} #{l(:download_counter_text_downloads)}", {
                            :controller => 'projects',
                            :action => 'list_files',
@@ -18,12 +15,6 @@ module DownloadCounter
                          )
 
         else
-          # All projects
-          Project.visible.each do |project|
-            downloads += project.attachments.collect(&:downloads).sum
-            downloads += project.versions.collect(&:attachments).flatten.collect(&:downloads).sum
-          end
-
           text = content_tag(:p, "#{downloads.to_s} #{l(:download_counter_text_downloads)}", :class => 'icon icon-package')
         end      
 
