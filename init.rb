@@ -7,6 +7,8 @@ Redmine::Plugin.register :redmine_download_counter do
   author 'Eric Davis'
   url 'https://projects.littlestreamsoftware.com'
   author_url 'http://www.littlestreamsoftware.com'
-  description "Displays the total number of downloads in the sidebars of the projects"
+  description "Displays the total number of downloads in the sidebar of the projects"
   version '0.1.0'
+
+  # TODO: Requires Redmine 0.8.2 or higher
 end

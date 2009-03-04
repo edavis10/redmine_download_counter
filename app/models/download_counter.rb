@@ -6,7 +6,13 @@ class DownloadCounter
       downloads += project.versions.collect(&:attachments).flatten.collect(&:downloads).sum
     else
       # All projects
-      Project.visible.each do |project|
+      if Project.respond_to?(:visible)
+        projects = Project.visible
+      else
+        projects = Project.find(:all, :conditions => Project.visible_by) # 0.8.x
+      end
+      
+      projects.each do |project|
         downloads += project.attachments.collect(&:downloads).sum
         downloads += project.versions.collect(&:attachments).flatten.collect(&:downloads).sum
       end
